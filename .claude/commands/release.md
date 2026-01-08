@@ -83,20 +83,20 @@ xcrun notarytool submit slownyt.zip --keychain-profile "notarytool" --wait
 
 ```bash
 xcrun stapler staple slownyt.app
-rm slownyt.zip
-ditto -c -k --keepParent slownyt.app slownyt.zip
+rm -f slownyt.zip slownyt-v*.zip
+ditto -c -k --keepParent slownyt.app slownyt-v<new_version>.zip
 ```
+
+Name the zip with the version (e.g., `slownyt-v0.0.2.zip`).
 
 ## 9. Create GitHub Release
 
 Extract release notes from the new version section in `CHANGELOG.md` (without the header):
 ```bash
-gh release create v<new_version> build/export/slownyt.zip \
+gh release create v<new_version> build/export/slownyt-v<new_version>.zip \
   --title "slownyt v<new_version>" \
   --notes "<release notes>"
 ```
-
-Use the new version calculated in step 1.
 
 ## 10. Commit and Push
 
