@@ -26,11 +26,21 @@ Calculate the new version based on `$ARGUMENTS.bump`:
 
 Also increment `CURRENT_PROJECT_VERSION` by 1.
 
-## 2. Update Version in Xcode Project
+## 2. Update Changelog
+
+Read `CHANGELOG.md` and update it:
+1. Move items from `[Unreleased]` to a new version section `[<new_version>] - <today's date>`
+2. Add appropriate subsections (Added, Changed, Fixed, Removed) based on changes
+3. Add empty `[Unreleased]` section at top
+4. Update comparison links at bottom of file
+
+If `[Unreleased]` is empty, ask the user what changes to document.
+
+## 3. Update Version in Xcode Project
 
 Update ALL occurrences of `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in `slownyt.xcodeproj/project.pbxproj` using the Edit tool with `replace_all: true`.
 
-## 3. Detect Signing Identity
+## 4. Detect Signing Identity
 
 Find the Developer ID certificate:
 ```bash
@@ -39,7 +49,7 @@ security find-identity -v -p codesigning | grep "Developer ID Application"
 
 Extract the certificate name and team ID for use in subsequent steps.
 
-## 4. Build and Archive
+## 5. Build and Archive
 
 ```bash
 xcodebuild -project slownyt.xcodeproj -scheme slownyt -configuration Release \
@@ -48,7 +58,7 @@ xcodebuild -project slownyt.xcodeproj -scheme slownyt -configuration Release \
   CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=<Team ID from step 2>
 ```
 
-## 5. Export with Developer ID
+## 6. Export with Developer ID
 
 Ensure `build/ExportOptions.plist` exists with the correct team ID, then:
 ```bash
@@ -59,7 +69,7 @@ xcodebuild -exportArchive \
   -exportOptionsPlist build/ExportOptions.plist
 ```
 
-## 6. Notarize
+## 7. Notarize
 
 Requires stored credentials: `xcrun notarytool store-credentials "notarytool"`
 
@@ -69,7 +79,7 @@ ditto -c -k --keepParent slownyt.app slownyt.zip
 xcrun notarytool submit slownyt.zip --keychain-profile "notarytool" --wait
 ```
 
-## 7. Staple and Package
+## 8. Staple and Package
 
 ```bash
 xcrun stapler staple slownyt.app
@@ -77,9 +87,9 @@ rm slownyt.zip
 ditto -c -k --keepParent slownyt.app slownyt.zip
 ```
 
-## 8. Create GitHub Release
+## 9. Create GitHub Release
 
-Ask the user for release notes, or generate from commits since last tag:
+Extract release notes from the new version section in `CHANGELOG.md` (without the header):
 ```bash
 gh release create v<new_version> build/export/slownyt.zip \
   --title "slownyt v<new_version>" \
@@ -88,6 +98,15 @@ gh release create v<new_version> build/export/slownyt.zip \
 
 Use the new version calculated in step 1.
 
-## 9. Verify
+## 10. Commit and Push
+
+Stage and commit the version bump and changelog update:
+```bash
+git add CHANGELOG.md slownyt.xcodeproj/project.pbxproj
+git commit -m "Release v<new_version>"
+git push
+```
+
+## 11. Verify
 
 Confirm the release was created and provide the release URL to the user.
