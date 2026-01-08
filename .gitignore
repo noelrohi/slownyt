@@ -1,22 +1,21 @@
+
+._*
+.AppleDouble
+.build/
+.DS_Store
+.LSOverride
+.swiftpm/
+*.xccheckout
+*.xcscmblueprint
+*.xcuserstate
+*.zip
+# CocoaPods
+# macOS
+# Swift Package Manager
 # Xcode
 build/
 DerivedData/
-*.xcuserstate
-*.xcscmblueprint
-*.xccheckout
-xcuserdata/
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
-
-# CocoaPods
-Pods/
-Podfile.lock
-
-# Swift Package Manager
-.build/
-.swiftpm/
 Package.resolved
+Podfile.lock
+Pods/
+xcuserdata/
