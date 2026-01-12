@@ -20,13 +20,11 @@ struct slownytApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Window("Settings", id: "settings") {
+        Settings {
             SettingsView {
                 viewModel.setupAutoRefresh()
             }
         }
-        .windowResizability(.contentSize)
-        .windowStyle(.hiddenTitleBar)
     }
 }
 

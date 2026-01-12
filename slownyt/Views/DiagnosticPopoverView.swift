@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DiagnosticPopoverView: View {
     @Bindable var viewModel: DiagnosticViewModel
-    @Environment(\.openWindow) private var openWindow
+    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -50,7 +50,8 @@ struct DiagnosticPopoverView: View {
                 Spacer()
 
                 Button {
-                    openWindow(id: "settings")
+                    openSettings()
+                    NSApp.activate(ignoringOtherApps: true)
                 } label: {
                     Image(systemName: "gear")
                 }
